@@ -1,0 +1,292 @@
+class Kontak:  
+# Membuat class Kontak untuk menyimpan data nama dan nomor HP
+
+    def __init__(self, nama, nomor):  
+    # Fungsi otomatis saat objek dibuat
+
+        self.nama = nama  
+        # Menyimpan nama kontak
+
+        self.nomor = nomor  
+        # Menyimpan nomor HP kontak
+
+        self.left = None  
+        # Cabang kiri BST masih kosong
+
+        self.right = None  
+        # Cabang kanan BST masih kosong
+
+
+class BSTKontak:  
+# Class utama Binary Search Tree
+
+    def __init__(self):  
+        self.root = None  
+        # Root awal kosong karena belum ada kontak
+
+
+    def insert_node(self, root, nama, nomor):  
+    # Fungsi untuk menambahkan kontak ke BST
+
+        if root is None:  
+            return Kontak(nama, nomor)  
+            # Kalau node kosong langsung buat kontak baru
+
+        if nama.lower() < root.nama.lower():  
+        # Kalau nama lebih kecil secara alfabet masuk kiri
+
+            root.left = self.insert_node(root.left, nama, nomor)  
+            # Simpan ke cabang kiri
+
+        elif nama.lower() > root.nama.lower():  
+        # Kalau nama lebih besar masuk kanan
+
+            root.right = self.insert_node(root.right, nama, nomor)  
+            # Simpan ke cabang kanan
+
+        return root  
+        # Mengembalikan root supaya BST tetap tersusun
+
+
+    def insert(self, nama, nomor):  
+    # Fungsi sederhana untuk insert data
+
+        self.root = self.insert_node(self.root, nama, nomor)  
+        # Mulai insert dari root
+
+
+    def search_node(self, root, nama):  
+    # Fungsi mencari kontak
+
+        if root is None:  
+            return None  
+            # Kalau kosong berarti kontak tidak ada
+
+        if root.nama.lower() == nama.lower():  
+            return root  
+            # Kalau nama cocok berarti ditemukan
+
+        if nama.lower() < root.nama.lower():  
+            return self.search_node(root.left, nama)  
+            # Cari ke kiri
+
+        return self.search_node(root.right, nama)  
+        # Cari ke kanan
+
+
+    def search(self, nama):  
+    # Fungsi pencarian utama
+
+        return self.search_node(self.root, nama)  
+        # Mulai cari dari root
+
+
+    def inorder(self, root):  
+    # Menampilkan data urut alfabet
+
+        if root is None:  
+            return  
+            # Kalau kosong berhenti
+
+        self.inorder(root.left)  
+        # Cek kiri dulu
+
+        print(f"Nama : {root.nama} | Nomor : {root.nomor}")  
+        # Tampilkan data
+
+        self.inorder(root.right)  
+        # Lanjut kanan
+
+
+    def preorder(self, root):  
+    # Root ditampilkan lebih dulu
+
+        if root is None:  
+            return
+
+        print(f"Nama : {root.nama} | Nomor : {root.nomor}")  
+        # Cetak data dulu
+
+        self.preorder(root.left)  
+        # Ke kiri
+
+        self.preorder(root.right)  
+        # Ke kanan
+
+
+    def postorder(self, root):  
+    # Kiri dan kanan dulu baru root
+
+        if root is None:  
+            return
+
+        self.postorder(root.left)  
+        # Ke kiri
+
+        self.postorder(root.right)  
+        # Ke kanan
+
+        print(f"Nama : {root.nama} | Nomor : {root.nomor}")  
+        # Cetak data terakhir
+
+
+    def count_contacts(self, root):  
+    # Menghitung jumlah kontak
+
+        if root is None:  
+            return 0  
+            # Kalau kosong jumlah 0
+
+        return 1 + self.count_contacts(root.left) + self.count_contacts(root.right)  
+        # Menghitung node sekarang + kiri + kanan
+
+
+    def find_first_contact(self, root):  
+    # Mencari kontak paling awal alfabet
+
+        if root is None:  
+            return None
+
+        current = root  
+
+        while current.left is not None:  
+            current = current.left  
+            # Terus bergerak ke kiri
+
+        return current  
+        # Node paling kiri adalah kontak pertama
+
+
+    def find_last_contact(self, root):  
+    # Mencari kontak paling akhir alfabet
+
+        if root is None:  
+            return None
+
+        current = root  
+
+        while current.right is not None:  
+            current = current.right  
+            # Terus bergerak ke kanan
+
+        return current  
+        # Node paling kanan adalah kontak terakhir
+
+
+def main():  
+# Fungsi utama program
+
+    bst = BSTKontak()  
+    # Membuat objek BST kontak
+
+    pilih = 0  
+
+    while pilih != 8:  
+    # Program berjalan sampai pilih keluar
+
+        print("\n=== DAFTAR KONTAK PONSEL ===")  
+        print("1. Tambah Kontak")  
+        print("2. Cari Kontak")  
+        print("3. Tampilkan Kontak (Inorder)")  
+        print("4. Preorder")  
+        print("5. Postorder")  
+        print("6. Kontak Awal")  
+        print("7. Jumlah Kontak")  
+        print("8. Keluar")  
+        # Menampilkan menu
+
+        try:  
+            pilih = int(input("Pilih menu: "))  
+            # Input pilihan menu
+
+        except ValueError:  
+            print("Input tidak valid!")  
+            # Kalau input bukan angka
+            continue  
+
+
+        if pilih == 1:  
+        # Menu tambah kontak
+
+            nama = input("Masukkan nama kontak : ")  
+            nomor = input("Masukkan nomor HP : ")  
+
+            bst.insert(nama, nomor)  
+            # Simpan ke BST
+
+            print("Kontak berhasil ditambahkan")  
+
+
+        elif pilih == 2:  
+        # Menu cari kontak
+
+            nama = input("Masukkan nama yang dicari : ")  
+
+            hasil = bst.search(nama)  
+            # Cari kontak
+
+            if hasil:  
+                print("Kontak ditemukan")  
+                print(f"Nama : {hasil.nama}")  
+                print(f"Nomor : {hasil.nomor}")  
+                # Menampilkan hasil pencarian
+
+            else:  
+                print("Kontak tidak ditemukan")  
+                # Kalau tidak ada
+
+
+        elif pilih == 3:  
+        # Menampilkan kontak urut alfabet
+
+            print("\nDaftar Kontak:")  
+            bst.inorder(bst.root)  
+
+
+        elif pilih == 4:  
+        # Menampilkan preorder
+
+            print("\nPreorder:")  
+            bst.preorder(bst.root)  
+
+
+        elif pilih == 5:  
+        # Menampilkan postorder
+
+            print("\nPostorder:")  
+            bst.postorder(bst.root)  
+
+
+        elif pilih == 6:  
+        # Menampilkan kontak pertama
+
+            awal = bst.find_first_contact(bst.root)  
+
+            if awal:  
+                print(f"Kontak pertama : {awal.nama} - {awal.nomor}")  
+
+            else:  
+                print("Daftar kontak kosong")  
+
+
+        elif pilih == 7:  
+        # Menghitung jumlah kontak
+
+            print(f"Jumlah kontak : {bst.count_contacts(bst.root)}")  
+
+
+        elif pilih == 8:  
+        # Keluar program
+
+            print("Program selesai.")  
+
+
+        else:  
+            print("Pilihan tidak valid!")  
+            # Kalau menu tidak ada
+
+
+if __name__ == "__main__":  
+# Menjalankan program utama
+
+    main()
